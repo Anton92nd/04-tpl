@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,10 +12,22 @@ namespace WeatherForecast
 	{
 		static void Main(string[] args)
 		{
-			var e1Task = StartE1Task("http://www.e1.ru");
-			var gismeteoTask = StartGismeteoTask("http://www.gismeteo.ru");
+			var e1Task = StartE1Task("http://www.e1.ru.ut");
+			var gismeteoTask = StartGismeteoTask("http://www.gismeteo.ru.jhff");
+            var weatherForecasters = new HashSet<Task<double>> { e1Task, gismeteoTask};
 
-			Console.WriteLine(Task.WhenAny(e1Task, gismeteoTask).Result.Result);
+		    while (weatherForecasters.Count > 0)
+		    {
+		        var resultTask = Task.WhenAny(weatherForecasters).Result;
+		        if (resultTask.IsFaulted)
+		            weatherForecasters.Remove(resultTask);
+		        else
+		        {
+                    Console.WriteLine(resultTask.Result);
+                    return;
+		        }
+		    }
+		    Console.WriteLine("Can't get weather! :(");
 		}
 
 		private static Task<double> StartE1Task(string url)
