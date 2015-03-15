@@ -6,24 +6,29 @@ namespace JapaneseCrossword
     [TestFixture]
     public class CrosswordSolverTests
     {
-        private CrosswordSolver solver;
+	    private ICrosswordSolver[] solvers;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
-            solver = new CrosswordSolver();
+	        solvers = new ICrosswordSolver[] {
+		        new CrosswordSolver(),
+		        new ParallelCrosswordSolver()
+	        };
         }
 
         [Test]
-        public void InputFileNotFound()
+        public void InputFileNotFound([Values (0, 1)] int solverNumber)
         {
+	        var solver = solvers[solverNumber];
             var solutionStatus = solver.Solve(Path.GetRandomFileName(), Path.GetRandomFileName());
             Assert.AreEqual(SolutionStatus.BadInputFilePath, solutionStatus);
         }
 
-        [Test]
-        public void IncorrectOutputFile()
+       [Test]
+        public void IncorrectOutputFile([Values (0, 1)] int solverNumber)
         {
+			var solver = solvers[solverNumber];
             var inputFilePath = @"TestFiles\SampleInput.txt";
             var outputFilePath = "///.&*#";
             var solutionStatus = solver.Solve(inputFilePath, outputFilePath);
@@ -31,8 +36,9 @@ namespace JapaneseCrossword
         }
 
         [Test]
-        public void IncorrectCrossword()
+        public void IncorrectCrossword([Values (0, 1)] int solverNumber)
         {
+			var solver = solvers[solverNumber];
             var inputFilePath = @"TestFiles\IncorrectCrossword.txt";
             var outputFilePath = Path.GetRandomFileName();
             var solutionStatus = solver.Solve(inputFilePath, outputFilePath);
@@ -40,8 +46,9 @@ namespace JapaneseCrossword
         }
 
         [Test]
-        public void Simplest()
+        public void Simplest([Values (0, 1)] int solverNumber)
         {
+			var solver = solvers[solverNumber];
             var inputFilePath = @"TestFiles\SampleInput.txt";
             var outputFilePath = Path.GetRandomFileName();
             var correctOutputFilePath = @"TestFiles\SampleInput.solved.txt";
@@ -51,8 +58,9 @@ namespace JapaneseCrossword
         }
 
         [Test]
-        public void Car()
+        public void Car([Values (0, 1)] int solverNumber)
         {
+			var solver = solvers[solverNumber];
             var inputFilePath = @"TestFiles\Car.txt";
             var outputFilePath = Path.GetRandomFileName();
             var correctOutputFilePath = @"TestFiles\Car.solved.txt";
@@ -62,8 +70,9 @@ namespace JapaneseCrossword
         }
 
         [Test]
-        public void Flower()
+        public void Flower([Values (0, 1)] int solverNumber)
         {
+			var solver = solvers[solverNumber];
             var inputFilePath = @"TestFiles\Flower.txt";
             var outputFilePath = Path.GetRandomFileName();
             var correctOutputFilePath = @"TestFiles\Flower.solved.txt";
@@ -73,8 +82,9 @@ namespace JapaneseCrossword
         }
 
         [Test]
-        public void Winter()
+        public void Winter([Values (0, 1)] int solverNumber)
         {
+			var solver = solvers[solverNumber];
             var inputFilePath = @"TestFiles\Winter.txt";
             var outputFilePath = Path.GetRandomFileName();
             var correctOutputFilePath = @"TestFiles\Winter.solved.txt";

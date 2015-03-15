@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace JapaneseCrossword
 {
@@ -6,8 +8,11 @@ namespace JapaneseCrossword
     {
         static void Main(string[] args)
         {
-			var solver = new CrosswordSolver();
-	        solver.Solve(@"TestFiles\Flower.txt", "output.txt");
+			var solver = new ParallelCrosswordSolver();
+	        var sw = new Stopwatch();
+			sw.Start();
+	        solver.Solve(@"TestFiles\Winter.txt", "output.txt");
+	        Console.WriteLine(sw.ElapsedMilliseconds);
         }
     }
 }
