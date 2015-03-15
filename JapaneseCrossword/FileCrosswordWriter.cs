@@ -10,14 +10,8 @@ namespace JapaneseCrossword
 {
 	class FileCrosswordWriter
 	{
-		private readonly string outputFilePath;
 
-		public FileCrosswordWriter(string outputFilePath)
-		{
-			this.outputFilePath = outputFilePath;
-		}
-
-		public void Write(Crossword crossword)
+		public void Write(Crossword crossword, string outputFilePath)
 		{
 			using (var writer = new StreamWriter(outputFilePath))
 			{

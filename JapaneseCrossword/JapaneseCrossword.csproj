@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cell.cs" />
     <Compile Include="Crossword.cs" />
     <Compile Include="CrosswordSolver.cs" />
     <Compile Include="CrosswordSolverTests.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="FileCrosswordWriter.cs" />
     <Compile Include="ICrosswordSolver.cs" />
     <Compile Include="LineSolver.cs" />
+    <Compile Include="MyException.cs" />
     <Compile Include="ParallelCrosswordSolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

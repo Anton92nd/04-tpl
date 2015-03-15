@@ -17,8 +17,8 @@ namespace JapaneseCrossword
 			Crossword crossword;
 			try
 			{
-				var reader = new FileCrosswordReader(inputFilePath);
-				crossword = reader.Read();
+				var reader = new FileCrosswordReader();
+				crossword = reader.Read(inputFilePath);
 			}
 			catch
 			{
@@ -29,14 +29,14 @@ namespace JapaneseCrossword
 			{
 				result = Solve(crossword);
 			}
-			catch (MyException ex)
+			catch (MyException)
 			{
 				return SolutionStatus.IncorrectCrossword;
 			}
 			try
 			{
-				var writer = new FileCrosswordWriter(outputFilePath);
-				writer.Write(crossword);
+				var writer = new FileCrosswordWriter();
+				writer.Write(crossword, outputFilePath);
 			}
 			catch
 			{

@@ -10,68 +10,34 @@ namespace JapaneseCrossword
 {
 	class FileCrosswordReader
 	{
-		private readonly string inputFilePath;
-
-		public FileCrosswordReader(string inputFilePath)
+		private List<List<int>> GetListArray(string[] lines, int count)
 		{
-			this.inputFilePath = inputFilePath;
+			return lines.Skip(1).Take(count)
+				.Select(line => line.Split(' ').Select(int.Parse).ToList())
+				.ToList();
 		}
 
-		public Crossword Read()
+		public Crossword Read(string inputFilePath)
 		{
-			int rowsCount = 0, colonsCount = 0;
 			var lines = File.ReadAllLines(inputFilePath);
+
 			var firstLine = lines[0].Split(':');
 			var firstLinesCount = int.Parse(firstLine[1]);
-			var firstIsRows = firstLine[0].Trim() == "rows";
-			if (firstIsRows)
-			{
-				rowsCount = firstLinesCount;
-			}
-			else
-			{
-				colonsCount = firstLinesCount;
-			}
-			var secondLine = lines[firstLinesCount + 1].Split(':');
+			var firstList = GetListArray(lines, firstLinesCount);
+
+			lines = lines.Skip(firstLinesCount + 1).ToArray();
+
+			var secondLine = lines[0].Split(':');
 			var secondLinesCount = int.Parse(secondLine[1]);
-			var secondIsRows = secondLine[0].Trim() == "rows";
-			if (secondIsRows)
-			{
-				rowsCount = secondLinesCount;
-			}
-			else
-			{
-				colonsCount = secondLinesCount;
-			}
-			var rows = new Line[rowsCount];
-			var colons = new Line[colonsCount];
-			for (var i = 1; i <= firstLinesCount; i++)
-			{
-				var blocks = lines[i].Split(' ').Select(int.Parse).ToList();
-				if (firstIsRows)
-				{
-					rows[i - 1] = new Line(blocks, new Cell[colonsCount]);
-				}
-				else
-				{
-					colons[i - 1] = new Line(blocks, new Cell[rowsCount]);
-				}
-			}
-			for (var i = 1; i <= secondLinesCount; i++)
-			{
-				var blocks = lines[i + firstLinesCount + 1].Split(' ').Select(int.Parse).ToList();
-				if (secondIsRows)
-				{
-					rows[i - 1] = new Line(blocks, new Cell[colonsCount]);
-				}
-				else
-				{
-					colons[i - 1] = new Line(blocks, new Cell[rowsCount]);
-				}
-			}
-			CheckLines(rows);
-			CheckLines(colons);
-			return new Crossword(rows, colons);
+			var secodnList = GetListArray(lines, secondLinesCount);
+
+			var firstArray = firstList.Select(line => new Line(line, new Cell[secondLinesCount])).ToArray();
+			var secondArray = secodnList.Select(line => new Line(line, new Cell[firstLinesCount])).ToArray();
+			CheckLines(firstArray);
+			CheckLines(secondArray);
+			return (firstLine[0].Trim() == "rows")
+				? new Crossword(firstArray, secondArray)
+				: new Crossword(secondArray, firstArray);
 		}
 
 		private void CheckLines(Line[] lines)

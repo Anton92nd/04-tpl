@@ -6,16 +6,6 @@ using NUnit.Framework;
 
 namespace JapaneseCrossword
 {
-	public class MyException : Exception
-	{
-		private readonly string message;
-
-		public MyException(string message)
-		{
-			this.message = message;
-		}
-	}
-
     public class CrosswordSolver : ICrosswordSolver
     {
 
@@ -24,8 +14,8 @@ namespace JapaneseCrossword
 	        Crossword crossword;
 	        try
 	        {
-				var reader = new FileCrosswordReader(inputFilePath);
-		        crossword = reader.Read();
+				var reader = new FileCrosswordReader();
+				crossword = reader.Read(inputFilePath);
 	        }
 	        catch
 	        {
@@ -42,8 +32,8 @@ namespace JapaneseCrossword
 	        }
 	        try
 	        {
-				var writer = new FileCrosswordWriter(outputFilePath);
-		        writer.Write(crossword);
+				var writer = new FileCrosswordWriter();
+		        writer.Write(crossword, outputFilePath);
 	        }
 			catch
 	        {

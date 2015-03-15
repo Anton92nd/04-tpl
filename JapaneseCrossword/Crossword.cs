@@ -7,11 +7,6 @@ using NUnit.Framework;
 
 namespace JapaneseCrossword
 {
-	public enum Cell
-	{
-		Unknown, Filled, Empty
-	}
-
 	public class Line
 	{
 		public List<int> Blocks { get; private set; }
