@@ -78,7 +78,7 @@ namespace JapaneseCrossword
 		{
 			if (lines.Any(line => line.Cells.Count() < line.Blocks.Sum() + line.Blocks.Count - 1))
 			{
-				throw new Exception("line has less cells than needed");
+				throw new MyException("line has less cells than needed");
 			}
 		}
 	}

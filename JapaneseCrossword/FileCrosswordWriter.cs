@@ -36,9 +36,10 @@ namespace JapaneseCrossword
 					return ".";
 				case Cell.Filled:
 					return "*";
-				default:
+				case Cell.Unknown:
 					return "?";
 			}
+			return "&";
 		}
 	}
 }
