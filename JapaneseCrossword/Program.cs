@@ -7,7 +7,7 @@ namespace JapaneseCrossword
         static void Main(string[] args)
         {
 			var solver = new CrosswordSolver();
-	        solver.Solve(@"TestFiles\Car.txt", "output.txt");
+	        solver.Solve(@"TestFiles\Flower.txt", "output.txt");
         }
     }
 }

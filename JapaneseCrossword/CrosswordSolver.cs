@@ -105,7 +105,7 @@ namespace JapaneseCrossword
 			    {
 				    blockPositions[blockNumber] = i;
 				    result = TryRecursiveFilling(line, blockPositions, canBeFilled, canBeEmpty,
-						blockNumber + 1, i + currentBlockSize) || result;
+						blockNumber + 1, i + currentBlockSize + 1) || result;
 			    }
 				if (line.Cells[i] == Cell.Filled)
 					return result;
