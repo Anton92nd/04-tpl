@@ -8,13 +8,10 @@ namespace JapaneseCrossword
 {
 	public class CrosswordSolverCore : ICrosswordSolverCore
 	{
-
-		private bool[] needUpdateRows, needUpdateColons;
-
 		public SolutionStatus Solve(Crossword crossword)
 		{
-			needUpdateRows = Enumerable.Range(0, crossword.Rows.Length).Select(x => true).ToArray();
-			needUpdateColons = Enumerable.Range(0, crossword.Colons.Length).Select(x => true).ToArray();
+			var needUpdateRows = Enumerable.Range(0, crossword.Rows.Length).Select(x => true).ToArray();
+			var needUpdateColons = Enumerable.Range(0, crossword.Colons.Length).Select(x => true).ToArray();
 			while (needUpdateColons.Any(cell => cell) || needUpdateRows.Any(cell => cell))
 			{
 				for (var i = 0; i < crossword.Rows.Length; i++)

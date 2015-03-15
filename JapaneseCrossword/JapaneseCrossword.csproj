@@ -53,6 +53,7 @@
     <Compile Include="FileCrossworldSolver.cs" />
     <Compile Include="ICrosswordSolverCore.cs" />
     <Compile Include="ICrosswordSolver.cs" />
+    <Compile Include="Line.cs" />
     <Compile Include="LineSolver.cs" />
     <Compile Include="MyException.cs" />
     <Compile Include="ParallelCrosswordSolverCore.cs" />

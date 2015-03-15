@@ -38,9 +38,11 @@ namespace JapaneseCrossword
 
 		bool CanPlaceBlockAtPosition(int position, Cell[] cells, int blockSize)
 		{
-			return position + blockSize <= cells.Count() &&
-				cells.Skip(position).Take(blockSize).All(cell => cell != Cell.Empty) &&
-				(position + blockSize == cells.Count() || cells[position + blockSize] != Cell.Filled);
+			if (position + blockSize > cells.Count())
+				return false;
+			if (cells.Skip(position).Take(blockSize).Any(cell => cell == Cell.Empty))
+				return false;
+			return position + blockSize == cells.Count() || cells[position + blockSize] != Cell.Filled;
 		}
 
 		private bool TryRecursiveFilling(Line line, int[] blockPositions, int blockNumber = 0, int cellNumber = 0)
