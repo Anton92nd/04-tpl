@@ -9,45 +9,11 @@ using NUnit.Framework;
 
 namespace JapaneseCrossword
 {
-	public class ParallelCrosswordSolver : ICrosswordSolver
+	public class ParallelCrosswordSolverCore : ICrosswordSolverCore
 	{
-
-		public SolutionStatus Solve(string inputFilePath, string outputFilePath)
-		{
-			Crossword crossword;
-			try
-			{
-				var reader = new FileCrosswordReader();
-				crossword = reader.Read(inputFilePath);
-			}
-			catch
-			{
-				return SolutionStatus.BadInputFilePath;
-			}
-			SolutionStatus result;
-			try
-			{
-				result = Solve(crossword);
-			}
-			catch (MyException)
-			{
-				return SolutionStatus.IncorrectCrossword;
-			}
-			try
-			{
-				var writer = new FileCrosswordWriter();
-				writer.Write(crossword, outputFilePath);
-			}
-			catch
-			{
-				return SolutionStatus.BadOutputFilePath;
-			}
-			return result;
-		}
-
 		private bool[] needUpdateRows, needUpdateColons;
 
-		private SolutionStatus Solve(Crossword crossword)
+		public SolutionStatus Solve(Crossword crossword)
 		{
 			needUpdateRows = Enumerable.Range(0, crossword.Rows.Length).Select(x => true).ToArray();
 			needUpdateColons = Enumerable.Range(0, crossword.Colons.Length).Select(x => true).ToArray();
