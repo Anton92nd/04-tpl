@@ -47,85 +47,6 @@ namespace JapaneseCrossword
 
 		private bool[] needUpdateRows, needUpdateColons;
 
-		private void UpdateCanBeArrays(List<int> blocks, int[] blockPositions, bool[] canBeFilled, bool[] canBeEmpty)
-		{
-			for (var i = 0; i < blocks.Count; i++)
-			{
-				for (var j = blockPositions[i]; j < blockPositions[i] + blocks[i]; j++)
-				{
-					canBeFilled[j] = true;
-				}
-				if (i < blocks.Count - 1)
-				{
-					for (var j = blockPositions[i] + blocks[i]; j < blockPositions[i + 1]; j++)
-					{
-						canBeEmpty[j] = true;
-					}
-				}
-			}
-			for (var i = 0; i < blockPositions[0]; i++)
-			{
-				canBeEmpty[i] = true;
-			}
-			for (var i = blockPositions[blocks.Count - 1] + blocks[blocks.Count - 1]; i < canBeEmpty.Length; i++)
-			{
-				canBeEmpty[i] = true;
-			}
-		}
-
-		bool CanPlaceBlockAtPosition(int position, Cell[] cells, int blockSize)
-		{
-			return position + blockSize <= cells.Count() &&
-				cells.Skip(position).Take(blockSize).All(cell => cell != Cell.Empty) &&
-				(position + blockSize == cells.Count() || cells[position + blockSize] != Cell.Filled);
-		}
-
-		private bool TryRecursiveFilling(Line line, int[] blockPositions, bool[] canBeFilled, bool[] canBeEmpty, int blockNumber = 0, int cellNumber = 0)
-		{
-			if (blockNumber == line.Blocks.Count)
-			{
-				if (line.Cells.Skip(cellNumber).Any(cell => cell == Cell.Filled))
-					return false;
-				UpdateCanBeArrays(line.Blocks, blockPositions, canBeFilled, canBeEmpty);
-				return true;
-			}
-			var currentBlockSize = line.Blocks[blockNumber];
-			var rightBorder = line.Cells.Length - (line.Blocks.Skip(blockNumber).Sum() + line.Blocks.Count - blockNumber - 1);
-			var result = false;
-			for (var i = cellNumber; i <= rightBorder; i++)
-			{
-				if (CanPlaceBlockAtPosition(i, line.Cells, currentBlockSize))
-				{
-					blockPositions[blockNumber] = i;
-					result = TryRecursiveFilling(line, blockPositions, canBeFilled, canBeEmpty,
-						blockNumber + 1, i + currentBlockSize + 1) || result;
-				}
-				if (line.Cells[i] == Cell.Filled)
-					return result;
-			}
-			return result;
-		}
-
-		private void UpdateLine(Line line)
-		{
-			var canBeFilled = new bool[line.Cells.Length];
-			var canBeEmpty = new bool[line.Cells.Length];
-			var blockPositions = new int[line.Blocks.Count];
-			if (!TryRecursiveFilling(line, blockPositions, canBeFilled, canBeEmpty))
-			{
-				throw new MyException("incorrect data in line");
-			}
-			for (var i = 0; i < line.Cells.Length; i++)
-			{
-				if (!canBeFilled[i] && !canBeEmpty[i])
-					throw new MyException("incorrect data in line");
-				if (canBeFilled[i] && !canBeEmpty[i])
-					line.Cells[i] = Cell.Filled;
-				if (!canBeFilled[i] && canBeEmpty[i])
-					line.Cells[i] = Cell.Empty;
-			}
-		}
-
 		private SolutionStatus Solve(Crossword crossword)
 		{
 			needUpdateRows = Enumerable.Range(0, crossword.Rows.Length).Select(x => true).ToArray();
@@ -136,7 +57,7 @@ namespace JapaneseCrossword
 					.Where(i => needUpdateRows[i])
 					.Select(i => Task.Run(() =>
 				{
-					UpdateLine(crossword.Rows[i]);
+					new LineSolver().UpdateLine(crossword.Rows[i]);
 					needUpdateRows[i] = false;
 				})).ToArray();
 				try
@@ -154,7 +75,7 @@ namespace JapaneseCrossword
 					.Where(i => needUpdateColons[i])
 					.Select(i => Task.Run(() =>
 					{
-						UpdateLine(crossword.Colons[i]);
+						new LineSolver().UpdateLine(crossword.Colons[i]);
 						needUpdateColons[i] = false;
 					})).ToArray();
 				try

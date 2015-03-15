@@ -50,6 +50,7 @@
     <Compile Include="FileCrosswordReader.cs" />
     <Compile Include="FileCrosswordWriter.cs" />
     <Compile Include="ICrosswordSolver.cs" />
+    <Compile Include="LineSolver.cs" />
     <Compile Include="ParallelCrosswordSolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
