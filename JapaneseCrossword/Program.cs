@@ -8,7 +8,7 @@ namespace JapaneseCrossword
     {
         static void Main(string[] args)
         {
-			var solver = new FileCrosswordSolver(new ParallelCrosswordSolverCore());
+			var solver = new CrosswordSolver(new ParallelCrosswordSolverCore());
 	        var sw = new Stopwatch();
 			sw.Start();
 	        solver.Solve(@"TestFiles\Winter.txt", "output.txt");

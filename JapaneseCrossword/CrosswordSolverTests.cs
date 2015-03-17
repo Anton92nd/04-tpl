@@ -6,14 +6,14 @@ namespace JapaneseCrossword
     [TestFixture]
     public class CrosswordSolverTests
     {
-	    private FileCrosswordSolver[] solvers;
+	    private CrosswordSolver[] solvers;
 
         [TestFixtureSetUp]
         public void SetUp()
         {
 	        solvers = new [] {
-		        new FileCrosswordSolver(new CrosswordSolverCore()),
-		        new FileCrosswordSolver(new ParallelCrosswordSolverCore())
+		        new CrosswordSolver(new CrosswordSolverCore()),
+		        new CrosswordSolver(new ParallelCrosswordSolverCore())
 	        };
         }
 

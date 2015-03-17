@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace JapaneseCrossword
 {
-	public class FileCrosswordSolver : ICrosswordSolver
+	public class CrosswordSolver : ICrosswordSolver
 	{
 		private readonly ICrosswordSolverCore solver;
 
-		public FileCrosswordSolver(ICrosswordSolverCore solver)
+		public CrosswordSolver(ICrosswordSolverCore solver)
 		{
 			this.solver = solver;
 		}
