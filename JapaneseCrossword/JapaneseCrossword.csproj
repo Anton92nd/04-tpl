@@ -49,12 +49,14 @@
     <Compile Include="CrosswordSolverCore.cs" />
     <Compile Include="CrosswordSolverTests.cs" />
     <Compile Include="FileCrosswordReader.cs" />
+    <Compile Include="FileCrosswordReaderTests.cs" />
     <Compile Include="FileCrosswordWriter.cs" />
     <Compile Include="FileCrossworldSolver.cs" />
     <Compile Include="ICrosswordSolverCore.cs" />
     <Compile Include="ICrosswordSolver.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="LineSolver.cs" />
+    <Compile Include="LineSolver_should.cs" />
     <Compile Include="MyException.cs" />
     <Compile Include="ParallelCrosswordSolverCore.cs" />
     <Compile Include="Program.cs" />

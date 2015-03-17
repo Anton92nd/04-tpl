@@ -26,13 +26,24 @@ namespace JapaneseCrossword
 					}
 				}
 			}
-			for (var i = 0; i < blockPositions[0]; i++)
+			if (blocks.Count > 0)
 			{
-				canBeEmpty[i] = true;
+				for (var i = 0; i < blockPositions[0]; i++)
+				{
+					canBeEmpty[i] = true;
+				}
+				for (var i = blockPositions[blocks.Count - 1] + blocks[blocks.Count - 1]; i < canBeEmpty.Length; i++)
+				{
+					canBeEmpty[i] = true;
+				}
 			}
-			for (var i = blockPositions[blocks.Count - 1] + blocks[blocks.Count - 1]; i < canBeEmpty.Length; i++)
+			else
 			{
-				canBeEmpty[i] = true;
+				for (var i = 0; i < canBeFilled.Length; i++)
+				{
+					canBeFilled[i] = false;
+					canBeEmpty[i] = true;
+				}
 			}
 		}
 
