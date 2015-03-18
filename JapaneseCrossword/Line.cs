@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JapaneseCrossword
 {
-	public class Line
+	public class Line : ICloneable
 	{
 		public List<int> Blocks { get; private set; }
 		public Cell[] Cells { get; private set; }
@@ -15,6 +15,11 @@ namespace JapaneseCrossword
 		{
 			Blocks = blocks;
 			Cells = cells;
+		}
+
+		public object Clone()
+		{
+			return new Line(Blocks, Cells.Select(x => x).ToArray());
 		}
 	}
 }

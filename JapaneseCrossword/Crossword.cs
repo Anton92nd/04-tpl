@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace JapaneseCrossword
 {
-	public class Crossword
+	public class Crossword : ICloneable
 	{
 		public Line[] Rows { get; private set; }
 		public Line[] Colons { get; private set; }
@@ -16,6 +16,11 @@ namespace JapaneseCrossword
 		{
 			Rows = rows;
 			Colons = colons;
+		}
+	
+		public object Clone()
+		{
+			return new Crossword(Rows.Select(x => x).ToArray(), Colons.Select(x => x).ToArray());
 		}
 	}
 }

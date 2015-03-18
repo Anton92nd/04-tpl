@@ -8,10 +8,11 @@ namespace JapaneseCrossword
     {
         static void Main(string[] args)
         {
-			var solver = new CrosswordSolver(new ParallelCrosswordSolverCore());
+			var solver = new CrosswordSolver(new FullSolverCore(new CrosswordSolverCore()));
 	        var sw = new Stopwatch();
 			sw.Start();
-	        solver.Solve(@"TestFiles\Newton.txt", "output.txt");
+	        var result = solver.Solve(@"TestFiles\Winter.txt", "output.txt");
+	        Console.WriteLine(result);
 	        Console.WriteLine(sw.ElapsedMilliseconds);
         }
     }
