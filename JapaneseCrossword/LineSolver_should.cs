@@ -66,5 +66,18 @@ namespace JapaneseCrossword
 				Cell.Filled, Cell.Filled, Cell.Empty, Cell.Filled
 			});
 		}
+
+		[Test]
+		public void Partially_Solve_Line_With_Two_Blocks()
+		{
+			var line = new Line(new List<int> {4, 7}, Enumerable.Range(0, 13).Select(x => Cell.Unknown).ToArray());
+			solver.UpdateLine(line);
+			Assert.AreEqual(line.Cells, new []
+			{
+				Cell.Unknown, Cell.Filled, Cell.Filled, Cell.Filled, Cell.Unknown, Cell.Unknown, 
+				Cell.Filled, Cell.Filled, Cell.Filled, Cell.Filled, Cell.Filled, Cell.Filled, 
+				Cell.Unknown
+			});
+		}
 	}
 }

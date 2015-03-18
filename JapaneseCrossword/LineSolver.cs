@@ -9,39 +9,36 @@ namespace JapaneseCrossword
 	public class LineSolver
 	{
 		private bool[] canBeFilled, canBeEmpty;
+		private int[,] triedToPlaceAt;
 
-		private void UpdateCanBeArrays(List<int> blocks, int[] blockPositions)
+		private void UpdateCanBeArrays(List<int> blocks, int[] blockPositions, int blockNumber)
 		{
-			for (var i = 0; i < blocks.Count; i++)
+			var position = blockPositions[blockNumber];
+			var length = blocks[blockNumber];
+			for (var i = position; i < position + length; i++)
 			{
-				for (var j = blockPositions[i]; j < blockPositions[i] + blocks[i]; j++)
-				{
-					canBeFilled[j] = true;
-				}
-				if (i < blocks.Count - 1)
-				{
-					for (var j = blockPositions[i] + blocks[i]; j < blockPositions[i + 1]; j++)
-					{
-						canBeEmpty[j] = true;
-					}
-				}
+				canBeFilled[i] = true;
 			}
-			if (blocks.Count > 0)
+			if (blockNumber == 0)
 			{
-				for (var i = 0; i < blockPositions[0]; i++)
-				{
-					canBeEmpty[i] = true;
-				}
-				for (var i = blockPositions[blocks.Count - 1] + blocks[blocks.Count - 1]; i < canBeEmpty.Length; i++)
+				for (var i = 0; i < position; i++)
 				{
 					canBeEmpty[i] = true;
 				}
 			}
 			else
 			{
-				for (var i = 0; i < canBeFilled.Length; i++)
+				var previousPosition = blockPositions[blockNumber - 1];
+				var previousLength = blocks[blockNumber - 1];
+				for (var i = previousPosition + previousLength; i < position; i++)
 				{
-					canBeFilled[i] = false;
+					canBeEmpty[i] = true;
+				}
+			}
+			if (blockNumber == blocks.Count - 1)
+			{
+				for (var i = position + length; i < canBeEmpty.Length; i++)
+				{
 					canBeEmpty[i] = true;
 				}
 			}
@@ -60,11 +57,10 @@ namespace JapaneseCrossword
 		{
 			if (blockNumber == line.Blocks.Count)
 			{
-				if (line.Cells.Skip(cellNumber).Any(cell => cell == Cell.Filled))
-					return false;
-				UpdateCanBeArrays(line.Blocks, blockPositions);
-				return true;
+				return !(line.Cells.Skip(cellNumber).Any(cell => cell == Cell.Filled));
 			}
+			if (triedToPlaceAt[cellNumber, blockNumber] != 0)
+				return triedToPlaceAt[cellNumber, blockNumber] == 1;
 			var currentBlockSize = line.Blocks[blockNumber];
 			var rightBorder = line.Cells.Length - (line.Blocks.Skip(blockNumber).Sum() + line.Blocks.Count - blockNumber - 1);
 			var result = false;
@@ -73,18 +69,30 @@ namespace JapaneseCrossword
 				if (CanPlaceBlockAtPosition(i, line.Cells, currentBlockSize))
 				{
 					blockPositions[blockNumber] = i;
-					result = TryRecursiveFilling(line, blockPositions, blockNumber + 1, i + currentBlockSize + 1) || result;
+					if (TryRecursiveFilling(line, blockPositions, blockNumber + 1, i + currentBlockSize + 1))
+					{
+						UpdateCanBeArrays(line.Blocks, blockPositions, blockNumber);
+						result = true;
+					}
 				}
 				if (line.Cells[i] == Cell.Filled)
-					return result;
+					break;
 			}
+			triedToPlaceAt[cellNumber, blockNumber] = result ? 1 : -1;
 			return result;
 		}
 
 		public void UpdateLine(Line line)
 		{
+			if (line.Blocks.Count == 0)
+			{
+				for (var i = 0; i < line.Cells.Length; i++)
+					line.Cells[i] = Cell.Empty;
+				return;
+			}
 			canBeFilled = new bool[line.Cells.Length];
 			canBeEmpty = new bool[line.Cells.Length];
+			triedToPlaceAt = new int[line.Cells.Length, line.Blocks.Count];
 			var blockPositions = new int[line.Blocks.Count];
 			if (!TryRecursiveFilling(line, blockPositions))
 			{
